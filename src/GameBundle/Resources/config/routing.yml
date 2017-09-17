@@ -1,0 +1,7 @@
+login:
+    path:     /login
+    defaults: { _controller: GameBundle:Security:login }
+    
+game_location:
+    path:     /location/{id}
+    defaults: { _controller: GameBundle:Default:location }

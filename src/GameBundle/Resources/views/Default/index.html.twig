@@ -1,0 +1,11 @@
+Location: {{location.name}}
+
+<br />
+<br />
+
+Players in this location:
+<br />
+{% for player in otherPlayers %}
+    {{player.getUsername()}}
+    <br />
+{% endfor %}
