@@ -8,6 +8,12 @@ class DefaultController extends Controller
 {
     public $entityManager;
     
+    public function indexAction()
+    {
+        return $this->render('GameBundle:Default:index.html.twig');
+    }
+    
+    // Testing the location/user idea works
     public function locationAction($id)
     {
         $this->entityManager = $this->getDoctrine()->getManager();
