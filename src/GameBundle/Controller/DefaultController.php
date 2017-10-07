@@ -3,6 +3,7 @@
 namespace GameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -30,6 +31,18 @@ class DefaultController extends Controller
         $otherPlayers = $this->entityManager->getRepository('GameBundle:Account')->findByCurrentLocation($id);
         
         return $this->render('GameBundle:Default:index.html.twig', ['location' => $location, 'otherPlayers' => $otherPlayers]);
+    }
+    
+    // Testing the API
+    public function apiLocationAction()
+    {
+        $responseString = json_encode(['success' => true, 'message' => 'well done']);
+        
+        $response = new Response($responseString);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        
+        return $response;
     }
 
 }

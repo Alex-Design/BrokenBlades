@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <!-- WIP INITIAL VUE PAGE -->
+        
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/vue@2.4.4/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- WRITE VUE BELOW HERE -->
+            
+            
+            {{ message }}
+            
+            <button @click="sendData">Click Me</button>
+            
+            <p>{{ msg }}</p>
+            
+            <!--WRITE VUE ABOVE HERE-->
+        </div>
+        
+        <script>
+            
+            
+            var app = new Vue({
+                el: '#app',
+                data: {
+                   message: 'Hello Vue!',
+                   msg: 'test',
+                },
+                methods: {
+                   sendData: function(){
+                      axios.get('http://localhost:8020/game/api')
+                        .then(function (response) {
+                            var responseHere = response.data.message;
+                            this.msg = responseHere;
+                            console.log(responseHere);
+                        }.bind(this))
+                        .catch(function (error) {
+                            console.log(error);
+                        }.bind(this));
+                   }
+                }
+            })
+        </script>
+    </body>
+</html>

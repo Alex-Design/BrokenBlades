@@ -9,3 +9,8 @@ game_home:
 game_location:
     path:     /location/{id}
     defaults: { _controller: GameBundle:Default:location }
+    
+# Testing the API
+api_game_location:
+    path:     /game/api
+    defaults: { _controller: GameBundle:Default:apiLocation }
