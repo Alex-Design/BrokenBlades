@@ -50,7 +50,7 @@ php bin/console server:start localhost:8001
 
 ## Contributing
 
-Contributions to the project would be greatly appreciated. However, the initial stages will be tightly controlled (the lore and gameplay need to be established) and only after the game is live, will it be easy to contribute. At that point, there will be a contribution guide including tutorials on how to make new parts of the game such as dungeons, quests, puzzles or even features. In the meantime, please star this project and return to it when it is ready for major contributions! Thank you :)
+Contributions to the project would be greatly appreciated. However, the initial stages will be tightly controlled (the lore and gameplay need to be established) and only after the game is live, will it be easy to contribute. At that point, there will be a contribution guide including tutorials on how to make new parts of the game such as dungeons, quests, puzzles or even features. In the meantime, please watch and/or star this project and return to it when it is ready for major contributions! Thank you :)
 
 ## Reporting Issues
 
