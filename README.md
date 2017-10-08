@@ -50,8 +50,8 @@ php bin/console doctrine:schema:update --force
 ```
 php bin/console server:start localhost:8001
 ```
+- If you get an error at this stage, please check out the following link: [Installing pcntl](https://stackoverflow.com/questions/33036773/how-to-enable-pcntl-in-php-while-using-a-framework-like-symfony2)
 - Visit localhost:8001 in your browser.
-(If you get an error at this stage, please check out the following link: [Installing pcntl](https://stackoverflow.com/questions/33036773/how-to-enable-pcntl-in-php-while-using-a-framework-like-symfony2))
 
 ## Contributing
 
