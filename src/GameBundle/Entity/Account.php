@@ -24,7 +24,8 @@ class Account implements UserInterface, \Serializable
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="currentLocation", referencedColumnName="id")
      */
     private $currentLocation;
     

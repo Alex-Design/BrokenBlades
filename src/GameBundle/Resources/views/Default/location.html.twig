@@ -9,3 +9,23 @@ Players in this location:
     {{player.getUsername()}}
     <br />
 {% endfor %}
+
+<br />
+<br />
+
+{% if north is defined and north is not empty %}
+<a href="{{ url('game_location', {'id': north}) }}">Move North</a>
+<br />
+{% endif %}
+{% if east is defined and east is not empty %}
+<a href="{{ url('game_location', {'id': east}) }}">Move East</a>
+<br />
+{% endif %}
+{% if south is defined and south is not empty %}
+<a href="{{ url('game_location', {'id': south}) }}">Move South</a>
+<br />
+{% endif %}
+{% if west is defined and west is not empty %}
+<a href="{{ url('game_location', {'id': west}) }}">Move West</a>
+<br />
+{% endif %}

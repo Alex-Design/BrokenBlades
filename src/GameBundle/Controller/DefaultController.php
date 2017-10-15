@@ -23,14 +23,49 @@ class DefaultController extends Controller
       
         $user = $this->getUser();
         
-        $user->setCurrentLocation($id);
+        $user->setCurrentLocation($location);
         
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         
+        // final version would remove this current player from the list
         $otherPlayers = $this->entityManager->getRepository('GameBundle:Account')->findByCurrentLocation($id);
         
-        return $this->render('GameBundle:Default:index.html.twig', ['location' => $location, 'otherPlayers' => $otherPlayers]);
+        // TODO refactor
+        if ($location->getNorth()) {
+            $north = $location->getNorth()->getId();
+        } else {
+            $north = null;
+        }
+        
+        if ($location->getEast()) {
+            $east = $location->getEast()->getId();
+        } else {
+            $east = null;
+        }
+        
+        if ($location->getSouth()) {
+            $south = $location->getSouth()->getId();
+        } else {
+            $south = null;
+        }
+        
+        if ($location->getWest()) {
+            $west = $location->getWest()->getId();
+        } else {
+            $west = null;
+        }
+        
+        return $this->render('GameBundle:Default:location.html.twig', 
+                [
+                    'location' => $location, 
+                    'otherPlayers' => $otherPlayers,
+                    'north' => $north,
+                    'east' => $east,
+                    'south' => $south,
+                    'west' => $west,
+                ]
+        );
     }
     
     // Testing the API

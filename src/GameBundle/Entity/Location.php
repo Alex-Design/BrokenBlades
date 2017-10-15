@@ -55,6 +55,30 @@ class Location
      * @ORM\Column(name="internalDescription", type="string", length=255, nullable=true)
      */
     private $internalDescription;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="north", referencedColumnName="id")
+     */
+    private $north;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="east", referencedColumnName="id")
+     */
+    private $east;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="south", referencedColumnName="id")
+     */
+    private $south;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="west", referencedColumnName="id")
+     */
+    private $west;
     
     /**
      * Get id
@@ -133,6 +157,46 @@ class Location
     function getInternalDescription() 
     {
         return $this->internalDescription;
+    }
+    
+    
+    
+    // TODO fix ordering
+    
+    function getNorth() {
+        return $this->north;
+    }
+
+    function getEast() {
+        return $this->east;
+    }
+
+    function getSouth() {
+        return $this->south;
+    }
+
+    function getWest() {
+        return $this->west;
+    }
+
+    function setNorth($north) {
+        $this->north = $north;
+        return $this;
+    }
+
+    function setEast($east) {
+        $this->east = $east;
+        return $this;
+    }
+
+    function setSouth($south) {
+        $this->south = $south;
+        return $this;
+    }
+
+    function setWest($west) {
+        $this->west = $west;
+        return $this;
     }
 }
 
