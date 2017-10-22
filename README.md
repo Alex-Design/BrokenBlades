@@ -53,6 +53,22 @@ php bin/console server:start localhost:8001
 - If you get an error at this stage, please check out the following link: [Installing pcntl](https://stackoverflow.com/questions/33036773/how-to-enable-pcntl-in-php-while-using-a-framework-like-symfony2)
 - Visit localhost:8001 in your browser.
 
+## Quick Start
+
+- To view the game mechanics quickly, enter the following command in your console:
+```
+php bin/console manage:initialize-project
+```
+- This will create an account and some locations. Next, visit the following url on your localhost to log in with the test account's details - (user: test-account) (pass: test-account)
+```
+localhost:8001/login
+```
+- Once logged in, visit the following url, where '1' is the ID of the first location in your database. If this is not applicable, then find the ID for the location with the reference of "GraveyardOfSouls" in your database.
+```
+localhost:8001/location/1
+```
+- Please keep in mind that all you see is a work in progress and may not represent the final result.
+
 ## Contributing
 
 Contributions to the project would be greatly appreciated. However, the initial stages will be tightly controlled (the lore and gameplay need to be established) and only after the game is live, will it be easy to contribute. At that point, there will be a contribution guide including tutorials on how to make new parts of the game such as dungeons, quests, puzzles or even features. In the meantime, please watch and/or star this project and return to it when it is ready for major contributions! Thank you :)
