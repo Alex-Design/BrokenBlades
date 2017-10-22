@@ -1,4 +1,4 @@
-Location: {{location.name}}
+Location: {{ location.name }}
 
 <br />
 <br />
@@ -6,9 +6,14 @@ Location: {{location.name}}
 Players in this location:
 <br />
 {% for player in otherPlayers %}
-    {{player.getUsername()}}
+    {{ player.getUsername() }}
     <br />
 {% endfor %}
+
+<br />
+<br />
+
+{{ location.description }}
 
 <br />
 <br />

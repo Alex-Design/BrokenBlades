@@ -46,6 +46,10 @@ class InitializeProjectCommand extends Command
                     . 'have done for the past year. Or was it only a few months? You cannot tell, '
                     . 'having lost all track of time. It all started when the Maldorians attacked... ',
                 'internalDescription' =>  'The starting area of the game.',
+                'north' => 'OvergrownTower',
+                'east' => null,
+                'south' => null,
+                'west' => null,
             ],
             2 => [
                 'name' => 'Overgrown Tower',
@@ -58,6 +62,10 @@ class InitializeProjectCommand extends Command
                 . 'nothing else, those that passed through here had enough respect to leave them '
                 . 'behind. That, or they feared the wrath of who once lived, learned and taught here.',
                 'internalDescription' =>  'Players teleport to here from GraveyardOfSouls.',
+                'north' => null,
+                'east' => null,
+                'south' => 'GraveyardOfSouls',
+                'west' => null,
             ],
         ];
         
@@ -71,6 +79,17 @@ class InitializeProjectCommand extends Command
             $this->entityManager->persist($location);
             $this->entityManager->flush();
         } 
+        
+        // now add directional movement
+        foreach ($startingLocations as $startingLocation) {
+            $databaseLocation = $this->entityManager->getRepository('GameBundle:Location')->findOneByReference($startingLocation['reference']);
+            $databaseLocation->setNorth(($startingLocation['north']) ? $this->entityManager->getRepository('GameBundle:Location')->findOneByReference($startingLocation['north']) : null);
+            $databaseLocation->setEast(($startingLocation['east']) ? $this->entityManager->getRepository('GameBundle:Location')->findOneByReference($startingLocation['east']) : null);
+            $databaseLocation->setSouth(($startingLocation['south']) ? $this->entityManager->getRepository('GameBundle:Location')->findOneByReference($startingLocation['south']) : null);
+            $databaseLocation->setWest(($startingLocation['west']) ? $this->entityManager->getRepository('GameBundle:Location')->findOneByReference($startingLocation['west']) : null);
+            $this->entityManager->persist($databaseLocation);
+            $this->entityManager->flush();
+        }
     }
     
     // Named 'createAccounts' in the event of more accounts being added here
