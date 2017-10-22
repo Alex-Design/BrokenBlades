@@ -27,7 +27,7 @@ class InitializeProjectCommand extends Command
     {
         $this->setup();
         $this->createLocations();
-//        $this->createAccounts();
+        $this->createAccounts();
         
         print_r(PHP_EOL);
         print_r('Project Initialized!');
@@ -95,12 +95,14 @@ class InitializeProjectCommand extends Command
     // Named 'createAccounts' in the event of more accounts being added here
     protected function createAccounts()
     {
+        $startingLocation = $this->entityManager->getRepository('GameBundle:Location')->findOneByReference('GraveyardOfSouls');
+         
         $account = new Account;
         
-        $account->setUsername('test');
-        $account->setPassword('test');
+        $account->setUsername('test-account');
+        $account->setPassword('test-account');
         $account->setEmail('test@test.com');
-        $account->setCurrentLocation(1);
+        $account->setCurrentLocation($startingLocation);
         $account->setIsActive(1);
         
         $this->entityManager->persist($account);

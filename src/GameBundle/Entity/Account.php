@@ -51,6 +51,27 @@ class Account implements UserInterface, \Serializable
         // $this->salt = md5(uniqid(null, true));
     }
 
+    // TODO: tidy up
+    public function setUsername($username) {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function setPassword($password) {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function setIsActive($isActive) {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
     public function getUsername()
     {
         return $this->username;
