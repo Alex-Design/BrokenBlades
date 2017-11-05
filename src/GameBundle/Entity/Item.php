@@ -28,11 +28,6 @@ class Item
      */
     private $name;
 
-    ///**
-    // * @ORM\ManyToMany(targetEntity="Inventory", mappedBy="items")
-    // */
-    //private $inventories;
-
     /**
      * Get id
      *

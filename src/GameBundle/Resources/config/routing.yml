@@ -14,4 +14,8 @@ api_game_location:
 # Actions
 game_move_character_to_location:
     path:     /location/{characterId}/{locationId}
-    defaults: { _controller: GameBundle:Default:location }
+    defaults: { _controller: GameBundle:Default:move }
+    
+game_pick_up_item:
+    path:     /pick-up/{characterId}/{itemId}
+    defaults: { _controller: GameBundle:Default:pickUpItem }

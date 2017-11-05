@@ -5,6 +5,8 @@ namespace GameBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use GameBundle\Entity\EvolvedItem;
+
 class DefaultController extends Controller
 {
     public $entityManager;
@@ -14,10 +16,12 @@ class DefaultController extends Controller
         return $this->render('GameBundle:Default:index.html.twig');
     }
     
-    // Testing the location/user idea works
-    public function locationAction($characterId, $locationId)
+    /*
+     * Usage: Page (turn into AJAX later)
+     */
+    public function moveAction($characterId, $locationId)
     {
-        $this->entityManager = $this->getDoctrine()->getManager();
+        $this->setup();
          
         $location = $this->entityManager->getRepository('GameBundle:Location')->find($locationId);     
         $character = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
@@ -68,7 +72,46 @@ class DefaultController extends Controller
         );
     }
     
-    // Testing the API
+    /*
+     * Usage: AJAX
+     */
+    public function pickUpItemAction($characterId, $itemId)
+    {
+        $this->setup();
+        
+        try {
+            $character = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
+            $item = $this->entityManager->getRepository('GameBundle:Item')->find($itemId);
+
+            $characterInventory = $character->getInventory();
+
+            $evolvedItem = new EvolvedItem();
+            $evolvedItem->setOriginalItem($item);
+            $evolvedItem->setInventory($characterInventory);
+
+            // TODO: split this into its own method, get all relevant properties from Item and set all onto EvolvedItem
+            $evolvedItem->setName($item->getName());
+
+            $this->entityManager->persist($evolvedItem);
+            $this->entityManager->flush(); 
+            
+            $success = true;
+            $message = $evolvedItem->getName() . ' picked up by ' . $character->getName();
+            
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+        
+        $JSONResponse = json_encode(['success' => $success, 'message' => $message]);
+        $response = new Response($JSONResponse, 200);
+        return $response;
+    }
+    
+    /*
+     * Testing the API
+     * Usage: AJAX
+     */
     public function apiLocationAction()
     {
         $responseString = json_encode(['success' => true, 'message' => 'well done']);
@@ -78,6 +121,12 @@ class DefaultController extends Controller
         $response->headers->set('Access-Control-Allow-Origin', '*');
         
         return $response;
+    }
+    
+    // Call this at the start of each other function where required
+    public function setup()
+    {
+        $this->entityManager = $this->getDoctrine()->getManager();
     }
 
 }

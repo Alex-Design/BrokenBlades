@@ -2,15 +2,17 @@
 
 namespace GameBundle\Entity;
 
+use GameBundle\Entity\Item;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Item
+ * EvolvedItem (also uses all same properties as found in Item)
  *
  * @ORM\Table(name="evolvedItem")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\EvolvedItemRepository")
  */
-class EvolvedItem
+class EvolvedItem 
 {
     /**
      * @var int
@@ -32,5 +34,36 @@ class EvolvedItem
      * @ORM\JoinColumn(name="inventoryId", referencedColumnName="id")
      */
     private $inventory;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+    
+    function getOriginalItem() {
+        return $this->originalItem;
+    }
+
+    function getInventory() {
+        return $this->inventory;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function setOriginalItem($originalItem) {
+        $this->originalItem = $originalItem;
+    }
+
+    function setInventory($inventory) {
+        $this->inventory = $inventory;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
 }
 
