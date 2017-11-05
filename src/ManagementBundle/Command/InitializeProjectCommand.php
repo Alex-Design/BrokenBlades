@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use GameBundle\Entity\Account;
+use GameBundle\Entity\GameCharacter;
 use GameBundle\Entity\Location;
 
 class InitializeProjectCommand extends Command
@@ -27,6 +28,7 @@ class InitializeProjectCommand extends Command
     {
         $this->setup();
         $this->createLocations();
+        $this->createCharacters();
         $this->createAccounts();
         
         print_r(PHP_EOL);
@@ -94,18 +96,31 @@ class InitializeProjectCommand extends Command
     
     // Named 'createAccounts' in the event of more accounts being added here
     protected function createAccounts()
-    {
-        $startingLocation = $this->entityManager->getRepository('GameBundle:Location')->findOneByReference('GraveyardOfSouls');
-         
+    {  
         $account = new Account;
         
         $account->setUsername('test-account');
         $account->setPassword('test-account');
         $account->setEmail('test@test.com');
-        $account->setCurrentLocation($startingLocation);
         $account->setIsActive(1);
         
         $this->entityManager->persist($account);
+        $this->entityManager->flush();
+    }
+    
+    // Named 'createCharacters' in the event of more characters being added here
+    protected function createCharacters() 
+    {  
+        $startingLocation = $this->entityManager->getRepository('GameBundle:Location')->findOneByReference('GraveyardOfSouls');
+        $testAccount = $this->entityManager->getRepository('GameBundle:Account')->findOneByUsername('test-account');
+        
+        $character = new GameCharacter;  
+        
+        $character->setCurrentLocation($startingLocation);
+        $character->setHasRecentlyActed(true);
+        $character->setAccount($testAccount);
+        
+        $this->entityManager->persist($character);
         $this->entityManager->flush();
     }
     
