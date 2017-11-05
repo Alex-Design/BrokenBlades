@@ -6,11 +6,12 @@ game_home:
     path:     /
     defaults: { _controller: GameBundle:Default:index }
     
-game_location:
-    path:     /location/{id}
-    defaults: { _controller: GameBundle:Default:location }
-    
 # Testing the API
 api_game_location:
     path:     /game/api
     defaults: { _controller: GameBundle:Default:apiLocation }
+    
+# Actions
+game_move_character_to_location:
+    path:     /location/{characterId}/{locationId}
+    defaults: { _controller: GameBundle:Default:location }

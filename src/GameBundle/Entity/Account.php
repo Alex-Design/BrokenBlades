@@ -24,12 +24,6 @@ class Account implements UserInterface, \Serializable
     private $username;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Location")
-     * @ORM\JoinColumn(name="currentLocation", referencedColumnName="id")
-     */
-    private $currentLocation;
-    
-    /**
      * @ORM\Column(type="string", length=64)
      */
     private $password;
@@ -40,13 +34,20 @@ class Account implements UserInterface, \Serializable
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(name="isActive", type="boolean")
      */
     private $isActive;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="GameCharacter", mappedBy="account")
+     */
+    private $characters;
+    
     public function __construct()
     {
         $this->isActive = true;
+        $this->characters = new ArrayCollection();
+        
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
@@ -77,17 +78,6 @@ class Account implements UserInterface, \Serializable
         return $this->username;
     }
     
-    public function setCurrentLocation($location)
-    {
-        $this->currentLocation = $location;
-        return $this;
-    }
-    
-    public function getCurrentLocation()
-    {
-        return $this->currentLocation;
-    }
-
     public function getSalt()
     {
         // you *may* need a real salt depending on your encoder

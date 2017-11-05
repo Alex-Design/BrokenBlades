@@ -15,21 +15,20 @@ class DefaultController extends Controller
     }
     
     // Testing the location/user idea works
-    public function locationAction($id)
+    public function locationAction($characterId, $locationId)
     {
         $this->entityManager = $this->getDoctrine()->getManager();
          
-        $location = $this->entityManager->getRepository('GameBundle:Location')->find($id);
-      
-        $user = $this->getUser();
+        $location = $this->entityManager->getRepository('GameBundle:Location')->find($locationId);     
+        $character = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
         
-        $user->setCurrentLocation($location);
+        $character->setCurrentLocation($location);
         
-        $this->entityManager->persist($user);
+        $this->entityManager->persist($character);
         $this->entityManager->flush();
         
         // final version would remove this current player from the list
-        $otherPlayers = $this->entityManager->getRepository('GameBundle:Account')->findByCurrentLocation($id);
+        $otherPlayers = $this->entityManager->getRepository('GameBundle:GameCharacter')->findByCurrentLocation($locationId);
         
         // TODO refactor
         if ($location->getNorth()) {
@@ -59,6 +58,7 @@ class DefaultController extends Controller
         return $this->render('GameBundle:Default:location.html.twig', 
                 [
                     'location' => $location, 
+                    'character' => $character,
                     'otherPlayers' => $otherPlayers,
                     'north' => $north,
                     'east' => $east,
