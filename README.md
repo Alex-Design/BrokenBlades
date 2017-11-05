@@ -63,9 +63,9 @@ php bin/console manage:initialize-project
 ```
 localhost:8001/login
 ```
-- Once logged in, visit the following url, where '1' is the ID of the first location in your database. If this is not applicable, then find the ID for the location with the reference of "GraveyardOfSouls" in your database.
+- Once logged in, visit the following url, where the first '1' is the ID of the first character in your database, and the second '1' is the first location in your database. If this location ID is not applicable, then find the ID for the location with the reference of "GraveyardOfSouls" in your database.
 ```
-localhost:8001/location/1
+localhost:8001/location/1/1
 ```
 - Please keep in mind that all you see is a work in progress and may not represent the final result.
 
