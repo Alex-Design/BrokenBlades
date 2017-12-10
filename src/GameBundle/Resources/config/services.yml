@@ -1,4 +1,4 @@
 services:
-#    game.example:
-#        class: GameBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    game.api:
+        class: GameBundle\Handler\APIHandler
+        arguments: ["@doctrine.orm.entity_manager"]

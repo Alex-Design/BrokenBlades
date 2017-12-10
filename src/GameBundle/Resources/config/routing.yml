@@ -19,3 +19,12 @@ game_move_character_to_location:
 game_pick_up_item:
     path:     /pick-up/{characterId}/{itemId}
     defaults: { _controller: GameBundle:Default:pickUpItem }
+    
+    
+    
+    
+    
+    
+api_game_handle:
+    path: /handle/{action}/{entity}
+    defaults: { _controller: GameBundle:API:handleAction }

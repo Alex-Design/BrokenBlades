@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
-        <!-- WIP INITIAL VUE PAGE -->
-        
-        <title>TODO supply a title</title>
+        <title>Broken Blades</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://unpkg.com/vue@2.4.4/dist/vue.js"></script>
@@ -15,11 +12,24 @@
             <!-- WRITE VUE BELOW HERE -->
             
             
-            {{ message }}
+            <h1>{{ title }}</h1>
             
-            <button @click="sendData">Click Me</button>
+            <p>{{ text }}</p>
             
-            <p>{{ msg }}</p>
+            
+            <p v-if="error">{{ responseMessage }}</p>
+            
+            <button @click="createNewCharacter">Create New Character</button>
+                
+            
+            <div v-if="createCharacter">      
+                <p>{{ responseMessage }}</p>
+                
+                <span>Character Name: </span>
+                <input type="text" name="characterName" v-model="characterName"> 
+                <button @click="saveCharacter">Save Character</button>
+                
+            </div>
             
             <!--WRITE VUE ABOVE HERE-->
         </div>
@@ -30,23 +40,57 @@
             var app = new Vue({
                 el: '#app',
                 data: {
-                   message: 'Hello Vue!',
-                   msg: 'test',
+                   title: 'Welcome to Broken Blades!',
+                   text: 'Would you like to create a new character?',
+                   responseMessage: '',
+                   accountId: 1,
+                   characterId: 0,
+                   characterName: '',
+                   createCharacter: false,
+                   error: false,
                 },
                 methods: {
-                   sendData: function(){
-                      axios.get('http://localhost:8020/game/api')
-                        .then(function (response) {
-                            var responseHere = response.data.message;
-                            this.msg = responseHere;
-                            console.log(responseHere);
+                    
+                    createNewCharacter: function(){
+                        
+                      // AXIOS does not allow normal object in POST
+                      var data = new FormData();
+                      data.append("accountId", this.accountId);
+                        
+                      axios.post('http://localhost:8020/handle/create/character', data) // get and send account ID/ideally reference
+                         .then(function (response) {
+                            this.responseMessage = response.data.message;
+                            this.characterId = response.data.characterId;
+                            this.createCharacter = true;
                         }.bind(this))
                         .catch(function (error) {
-                            console.log(error);
+                            this.error = true;
+                            this.error = error;
+                            console.log(error); // temp
                         }.bind(this));
-                   }
+                    },
+                    
+                    saveCharacter: function(){
+                        
+                        // AXIOS does not allow normal object in POST
+                        var data = new FormData();
+                        data.append("accountId", this.accountId);
+                        data.append("characterId", this.characterId);
+                        data.append("name", this.characterName);
+
+                        axios.post('http://localhost:8020/handle/update/character', data)
+                             .then(function (response) {
+                                var responseHere = response.data.message;
+                                this.responseMessage = responseHere;
+                            }.bind(this))
+                            .catch(function (error) {
+                                this.error = true;
+                                this.error = error;
+                                console.log(error); // temp
+                            }.bind(this));
+                    },
                 }
-            })
+            });
         </script>
     </body>
 </html>
