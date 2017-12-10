@@ -69,6 +69,10 @@ localhost:8001/location/1/1
 ```
 - Please keep in mind that all you see is a work in progress and may not represent the final result.
 
+### Vue Gameplay
+
+The Vue side of the project is still a heavy work in progress, but can be viewed if you open the GameFrontend/index.html file in your browser. If you get errors at this stage, it may be due to a bug or hardcoded value (used in testing with my database) - in which case, please feel free to submit a pull request to fix the bug, or change the hardcoded value(s) in src/GameBundle/Handler/APIHandler.php to fit your database :)
+
 ## Contributing
 
 Contributions to the project would be greatly appreciated. However, the initial stages will be tightly controlled (the lore and gameplay need to be established) and only after the game is live, will it be easy to contribute. At that point, there will be a contribution guide including tutorials on how to make new parts of the game such as dungeons, quests, puzzles or even features. In the meantime, please watch and/or star this project and return to it when it is ready for major contributions! Thank you :)
