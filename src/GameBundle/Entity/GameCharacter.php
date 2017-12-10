@@ -54,7 +54,6 @@ class GameCharacter
         // $this->salt = md5(uniqid(null, true));
     }
 
-    
     // Todo: Tidy up
     public function getId() {
         return $this->id;

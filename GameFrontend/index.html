@@ -10,17 +10,17 @@
     <body>
         <div id="app">
             <!-- WRITE VUE BELOW HERE -->
-            
-            
-            <h1>{{ title }}</h1>
-            
-            <p>{{ text }}</p>
-            
+            <div v-if="introScreen">
+                <h1>{{ title }}</h1>
+                <p>{{ text }}</p>
+            </div>
             
             <p v-if="error">{{ responseMessage }}</p>
             
-            <button @click="createNewCharacter">Create New Character</button>
-                
+            <div v-if="introScreen">
+                <button @click="createNewCharacter">Create New Character</button>
+                <button @click="playGame">Play Game</button>
+            </div>
             
             <div v-if="createCharacter">      
                 <p>{{ responseMessage }}</p>
@@ -28,31 +28,68 @@
                 <span>Character Name: </span>
                 <input type="text" name="characterName" v-model="characterName"> 
                 <button @click="saveCharacter">Save Character</button>
-                
             </div>
             
+            <div v-if="moveCharacter">   
+                <div v-if="locationData">
+                    <span>Location: {{ locationName }}</span>
+                    <br />
+
+                    <p>{{ locationDescription }}</p>
+
+                    <br />
+
+                    <span>Other Characters Present: </span>
+
+                    <br />
+
+                    <ul>
+                        <li v-for="characterPresent in charactersPresent">
+                            {{ characterPresent.name }}
+                        <li>
+                    </ul>
+                    
+                    <br />
+
+                    <button v-if="moveNorth" @click="moveCharacterNorth">Move North</button>
+                    <button v-if="moveEast" @click="moveCharacterEast">Move East</button>
+                    <button v-if="moveSouth" @click="moveCharacterSouth">Move South</button>
+                    <button v-if="moveWest" @click="moveCharacterWest">Move West</button>
+                
+                </div>
+            </div>
             <!--WRITE VUE ABOVE HERE-->
         </div>
         
         <script>
-            
-            
             var app = new Vue({
                 el: '#app',
                 data: {
                    title: 'Welcome to Broken Blades!',
-                   text: 'Would you like to create a new character?',
+                   text: 'What would you like to do?',
                    responseMessage: '',
-                   accountId: 1,
-                   characterId: 0,
-                   characterName: '',
-                   createCharacter: false,
                    error: false,
+                   
+                   introScreen: true,
+
+                   createCharacter: false,
+                   accountId: 1,
+                   characterId: 1,
+                   characterName: '',
+                   
+                   moveCharacter: false,
+                   locationData: null,
+                   moveNorth: false,
+                   moveEast: false,
+                   moveSouth: false,
+                   moveWest: false,
                 },
                 methods: {
                     
-                    createNewCharacter: function(){
+                    createNewCharacter: function() {
                         
+                      this.introScreen = false;
+                      
                       // AXIOS does not allow normal object in POST
                       var data = new FormData();
                       data.append("accountId", this.accountId);
@@ -70,7 +107,9 @@
                         }.bind(this));
                     },
                     
-                    saveCharacter: function(){
+                    saveCharacter: function() {
+                        
+                        this.introScreen = true;
                         
                         // AXIOS does not allow normal object in POST
                         var data = new FormData();
@@ -80,14 +119,97 @@
 
                         axios.post('http://localhost:8020/handle/update/character', data)
                              .then(function (response) {
-                                var responseHere = response.data.message;
-                                this.responseMessage = responseHere;
+                                this.responseMessage = response.data.message;
                             }.bind(this))
                             .catch(function (error) {
                                 this.error = true;
                                 this.error = error;
                                 console.log(error); // temp
                             }.bind(this));
+                    },
+                    
+                    playGame: function() {
+                        this.responseMessage = '';
+                        this.error = false;
+                        this.introScreen = false;
+                        this.createcharacter = false;
+                        this.moveCharacter = true;
+                        this.getCharacterLocation();
+                    },
+                    
+                    getCharacterLocation: function() {
+                        
+                        // AXIOS does not allow normal object in POST
+                        var data = new FormData();
+                        data.append("accountId", this.accountId);
+                        data.append("characterId", this.characterId);
+
+                        axios.post('http://localhost:8020/handle/getCharacter/location', data)
+                             .then(function (response) {
+                                this.responseMessage = response.data.message;
+                        
+                                this.moveNorth = response.data.moveNorth;
+                                this.moveEast = response.data.moveEast;
+                                this.moveSouth = response.data.moveSouth;
+                                this.moveWest = response.data.moveWest;
+                                
+                                this.locationName = response.data.locationName;
+                                this.locationDescription = response.data.locationDescription;
+                                this.charactersPresent = response.data.allPlayersInLocation;
+                                
+                                this.locationData = true;
+                            }.bind(this))
+                            .catch(function (error) {
+                                this.error = true;
+                                this.error = error;
+                                console.log(error); // temp
+                            }.bind(this));
+                    },
+                    
+                    moveCharacterAround: function(moveTo) {
+                        
+                        // AXIOS does not allow normal object in POST
+                        var data = new FormData();
+                        data.append("accountId", this.accountId);
+                        data.append("characterId", this.characterId);
+                        data.append("moveTo", moveTo);
+                        
+                        axios.post('http://localhost:8020/handle/moveCharacter/location', data)
+                             .then(function (response) {
+                                this.responseMessage = response.data.message;
+                        
+                                this.moveNorth = response.data.moveNorth;
+                                this.moveEast = response.data.moveEast;
+                                this.moveSouth = response.data.moveSouth;
+                                this.moveWest = response.data.moveWest;
+                                
+                                this.locationName = response.data.locationName;
+                                this.locationDescription = response.data.locationDescription;
+                                this.charactersPresent = response.data.allPlayersInLocation;
+                                
+                                this.locationData = true;
+                            }.bind(this))
+                            .catch(function (error) {
+                                this.error = true;
+                                this.error = error;
+                                console.log(error); // temp
+                            }.bind(this));
+                    },
+                    
+                    moveCharacterNorth: function() {
+                        this.moveCharacterAround(this.moveNorth);
+                    },
+                    
+                    moveCharacterEast: function() {
+                        this.moveCharacterAround(this.moveEast);
+                    },
+                    
+                    moveCharacterSouth: function() {
+                        this.moveCharacterAround(this.moveSouth);
+                    },
+                    
+                    moveCharacterWest: function() {
+                        this.moveCharacterAround(this.moveWest);
                     },
                 }
             });

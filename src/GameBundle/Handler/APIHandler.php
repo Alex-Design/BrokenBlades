@@ -34,11 +34,15 @@ class APIHandler
                 'characterId' => $characterEntity->getId(),
             ];
 
-            $success = true;
-            $message = 'You have created a new character.';
-        } catch (\Exception $e) { 
+            if ($characterEntity) {
+                $success = true;
+                $message = 'You have created a new character.';
+            } else {
+                throw new \Exception('Unable to create new character.'); 
+            }
+        } catch (\Exception $e) { // TODO BUG: \Exception does not catch mysql errors eg duplicate entries
             $furtherData = null;
-            $success = true;
+            $success = false;
             $message = 'Unable to create new character. Error: ' . $e->getMessage();  
         }
         
@@ -65,20 +69,92 @@ class APIHandler
             $furtherData = null;
             $success = true;
             $message = 'Your character has been saved.';
-        } catch (Exception $ex) {
+        } catch (Exception $e) {
             $furtherData = null;
             $success = false;
-            $message = 'Your character could not be saved. Error: ' . $ex->getMessage();
+            $message = 'Your character could not be saved. Error: ' . $e->getMessage();
         }
         
         return $this->returnStandardizedResponse($success, $message, $furtherData);
     }
     
+    public function APIGetCharacterLocationAction($request)
+    {
+        try {
+            $characterId = $request->get('characterId');
+            $characterEntity = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
+        
+            if (!$characterEntity) {
+                throw new \Exception('Could not find character with ID of ' . $characterId);
+            }
+            
+            $locationEntity = $characterEntity->getCurrentLocation();
+            
+            $allCharactersPresentArray = [];
+            
+            $otherCharactersPresentArray = $this->entityManager->getRepository('GameBundle:GameCharacter')
+                ->findBy(
+                    [
+                        'currentLocation' => $locationEntity->getId(),
+                        'hasRecentlyActed' => 1,
+                    ]
+                );
+            
+            foreach ($otherCharactersPresentArray as $characterPresent) {
+                $allCharactersPresentArray[] = 
+                    [
+                        'id' => $characterPresent->getId(),
+                        'name' => $characterPresent->getName(),
+                    ];
+            }
+            
+            $furtherData = [
+                'locationName' => $locationEntity->getName(),
+                'locationDescription' => $locationEntity->getDescription(),
+                'allPlayersInLocation' => $allCharactersPresentArray,
+                'moveNorth' => $locationEntity->getNorth() ? $locationEntity->getNorth()->getId() : null,
+                'moveEast' => $locationEntity->getEast() ? $locationEntity->getEast()->getId() : null,
+                'moveSouth' => $locationEntity->getSouth() ? $locationEntity->getSouth()->getId() : null,
+                'moveWest' => $locationEntity->getWest() ? $locationEntity->getWest()->getId() : null,
+            ];
+            $success = true;
+            $message = $characterEntity->getName() . ' has moved to ' . $locationEntity->getName();
+        } catch (\Exception $e) {
+            $furtherData = null;
+            $success = false;
+            $message = 'Your character could not be moved. Error: ' . $e->getMessage();
+        }
+        
+        return $this->returnStandardizedResponse($success, $message, $furtherData);
+    }
+    
+    public function APIMoveCharacterLocationAction($request)
+    {
+        $characterId = $request->get('characterId');
+        $characterEntity = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
+
+        // Later, lock movement to only being allowable from a linked location unless overriden
+//        $currentLocation = $characterEntity->getCurrentLocation();
+        
+        $locationEntity = $this->entityManager->getRepository('GameBundle:Location')
+                ->find($request->get('moveTo'));  
+        
+        $characterEntity->setCurrentLocation($locationEntity);
+        
+        $this->entityManager->persist($characterEntity);
+        $this->entityManager->flush();
+        
+        return $this->APIGetCharacterLocationAction($request);
+    }
     
     public function setCharacterStartingData(GameCharacter $characterEntity)
     {
+        $locationEntity = $this->entityManager->getRepository('GameBundle:Location')
+                ->find(25);        
+       
         $characterEntity->setName(uniqid());
         $characterEntity->setHasRecentlyActed(false);
+        $characterEntity->setCurrentLocation($locationEntity);
         
         $this->entityManager->persist($characterEntity);
         $this->entityManager->flush();
