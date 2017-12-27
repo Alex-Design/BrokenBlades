@@ -31,7 +31,7 @@ class EvolvedItem
     
     /**
      * @ORM\ManyToOne(targetEntity="Inventory")
-     * @ORM\JoinColumn(name="inventoryId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="inventory", referencedColumnName="id")
      */
     private $inventory;
     
