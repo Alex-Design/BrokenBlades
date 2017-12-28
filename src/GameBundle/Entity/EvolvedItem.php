@@ -42,6 +42,13 @@ class EvolvedItem
      */
     private $name;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rarityColour", type="string", length=255)
+     */
+    private $rarityColour;
+    
     function getOriginalItem() {
         return $this->originalItem;
     }
@@ -53,7 +60,11 @@ class EvolvedItem
     function getName() {
         return $this->name;
     }
-
+    
+    function getRarityColour() {
+        return $this->rarityColour;
+    }
+    
     function setOriginalItem($originalItem) {
         $this->originalItem = $originalItem;
     }
@@ -64,6 +75,11 @@ class EvolvedItem
 
     function setName($name) {
         $this->name = $name;
+    }
+    
+    function setRarityColour($rarityColour) 
+    {
+        $this->rarityColour = $rarityColour;
     }
 }
 

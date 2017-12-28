@@ -27,6 +27,13 @@ class Item
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rarityColour", type="string", length=255)
+     */
+    private $rarityColour;
 
     /**
      * Get id
@@ -60,6 +67,17 @@ class Item
     public function getName()
     {
         return $this->name;
+    }
+    
+    function setRarityColour($rarityColour) 
+    {
+        $this->rarityColour = $rarityColour;
+        
+        return $this;
+    }
+    
+    function getRarityColour() {
+        return $this->rarityColour;
     }
 }
 

@@ -107,16 +107,7 @@ class APIHandler
                     ];
             }
             
-            // TODO $droppedLoot = $this->APIGenerateDroppedLootItems();
-            
-            $droppedLootItems = [
-                1 => 
-                    [
-                        'id' => 1,
-                        'name' => 'test',
-                        'rarity' => 'gold rare',
-                    ]
-            ];
+            $droppedLootItems = $this->APIGenerateDroppedLootItems();
                     
             $furtherData = [
                 'locationName' => $locationEntity->getName(),
@@ -189,6 +180,7 @@ class APIHandler
                 $characterInventoryItemArray[] = 
                         [
                             'name' => $inventoryItem->getName(),
+                            'rarityColour' => $inventoryItem->getRarityColour(),
                         ];
             }
             
@@ -205,9 +197,21 @@ class APIHandler
         return $this->returnStandardizedResponse($success, $message, $furtherData);
     }
     
+    // TODO remove hardcoding, use loot table instead
     public function APIGenerateDroppedLootItems()
     {
-        return true;
+        $item = $this->entityManager->getRepository('GameBundle:Item')->find(1);
+        
+        $droppedLootItems = [
+            1 => 
+                [
+                    'id' => $item->getId(),
+                    'name' => $item->getName(),
+                    'rarityColour' => $item->getRarityColour(),
+                ]
+        ];
+        
+        return $droppedLootItems;
     }
     
     public function APIaddCharacterItemAction($request)
@@ -218,7 +222,7 @@ class APIHandler
         $characterInventoryId = $characterEntity->getInventory()->getId();
 
         try {
-            $evolvedItem = $this->createEvolvedItem($characterInventoryId, $itemId);
+            $evolvedItem = $this->takeEvolvedItem($characterInventoryId, $itemId);
             $success = true;
             $message = $evolvedItem->getName() . ' picked up by ' . $characterEntity->getName();
         } catch (\Exception $e) {
@@ -232,7 +236,6 @@ class APIHandler
     public function createEvolvedItem($characterInventoryId, $itemId)
     {
         $item = $this->entityManager->getRepository('GameBundle:Item')->find($itemId);
-        $characterInventory = $this->entityManager->getRepository('GameBundle:Inventory')->find($characterInventoryId);
         
         $characterItemsOwned = $this->entityManager->getRepository('GameBundle:EvolvedItem')->findByInventory($characterInventoryId);
         
@@ -242,7 +245,6 @@ class APIHandler
         
         $evolvedItem = new EvolvedItem();
         $evolvedItem->setOriginalItem($item);
-        $evolvedItem->setInventory($characterInventory);
 
         // TODO: split this into its own method, get all relevant properties from Item and set all onto EvolvedItem
         $evolvedItem->setName($item->getName());
@@ -253,7 +255,23 @@ class APIHandler
         return $evolvedItem;
     }
     
-    
+    public function takeEvolvedItem($characterInventoryId, $itemId)
+    {
+        $characterInventory = $this->entityManager->getRepository('GameBundle:Inventory')->find($characterInventoryId);
+        $characterItemsOwned = $this->entityManager->getRepository('GameBundle:EvolvedItem')->findByInventory($characterInventoryId);
+        
+        if ($characterItemsOwned >= $characterInventory->getSpaces()) {
+            throw new \Exception('Inventory limit reached!');
+        }
+        
+        $evolvedItem = $this->createEvolvedItem($itemId);
+        $evolvedItem->setInventory($characterInventory);
+        
+        $this->entityManager->persist($evolvedItem);
+        $this->entityManager->flush(); 
+        
+        return $evolvedItem;
+    }
     
     public function returnStandardizedResponse($success, $message, array $furtherData = null)
     {

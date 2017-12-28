@@ -16,6 +16,12 @@ class DefaultController extends Controller
         return $this->render('GameBundle:Default:index.html.twig');
     }
     
+    public function playAction()
+    {
+        $gameplayFrontend = file_get_contents('GameFrontend/gameFrontend.html');
+        return new Response($gameplayFrontend);
+    }
+    
     /*
      * Usage: Page (turn into AJAX later)
      */

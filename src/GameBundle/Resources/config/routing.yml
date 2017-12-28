@@ -6,6 +6,13 @@ game_home:
     path:     /
     defaults: { _controller: GameBundle:Default:index }
     
+game_play:
+    path:     /game
+    defaults: { _controller: GameBundle:Default:play }
+    
+    
+    
+    
 # Testing the API
 api_game_location:
     path:     /game/api
