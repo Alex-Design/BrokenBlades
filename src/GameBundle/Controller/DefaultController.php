@@ -5,6 +5,8 @@ namespace GameBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use GameBundle\Repository\LootGroupRepository;
+
 use GameBundle\Entity\EvolvedItem;
 
 class DefaultController extends Controller
@@ -18,6 +20,15 @@ class DefaultController extends Controller
     
     public function playAction()
     {
+        $this->setup();
+        
+//        $test = $this->entityManager->getRepository('GameBundle:LootGroup')->find(1); 
+//        $test2 = $test->getLootTables();
+//
+//        foreach ($test2 as $id) {
+//            var_dump($id->getName()); die;
+//        }
+
         $gameplayFrontend = file_get_contents('GameFrontend/gameFrontend.html');
         return new Response($gameplayFrontend);
     }
