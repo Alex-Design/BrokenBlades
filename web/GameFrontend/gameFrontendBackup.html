@@ -7,228 +7,18 @@
         <script src="https://unpkg.com/vue@2.4.4/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-        
-        <style>
-            .location-background {
-                height: 500px;
-                background-repeat: no-repeat;
-                background-size: cover;
-            }
-            
-            .story-background {
-                background-color: #000000c7;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                margin-top: 20px;
-                color: white;
-            }
-            
-            .sidebar-background {
-                background-color: #000000c7;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                margin-top: 20px;
-                color: white;
-            }
-            
-            .story, .statistics, .inventory, .players-present {
-                margin: 0 10px 0 10px;
-            }
-            
-            .box {
-                background-color: lightblue;
-                height: 30px;
-                max-width: 30px;
-                margin: 5px;
-            }
-            
-            .inventory-boxes {
-                margin-left:-4px;
-            }
-            
-            .cta-gradient {
-                background: #f2994a; /* fallback for old browsers */
-                background: -webkit-linear-gradient(to right, #f2994a, #f2c94c); /* Chrome 10-25, Safari 5.1-6 */
-                background: linear-gradient(to right, #f2994a, #f2c94c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            }
-            
-            .option-gradient {
-                background: #6190e8; /* fallback for old browsers */
-                background: -webkit-linear-gradient(to right, #6190e8, #a7bfe8); /* Chrome 10-25, Safari 5.1-6 */
-                background: linear-gradient(to right, #6190e8, #a7bfe8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ 
-            }
-            
-            .btn {
-                border: none;
-                border-radius: 0;
-            }
-        </style>
+        <!-- Bootstrap Core CSS -->
+        <link href="GameFrontend/bootstrap.min.css" rel="stylesheet">
+        <!-- This page CSS -->
+        <!-- Custom CSS -->
+        <link href="GameFrontend/style.css" rel="stylesheet">
+        <link href="GameFrontend/landing-page.css" rel="stylesheet">
     </head>
     <body>
-        <div id="app">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col px-0">
-                        <ul class="nav justify-content-center">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/">Broken Blades</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/game">Play Game</a>
-                            </li>
-                            <li class="nav-item">
-                                <button class="btn btn-md cta-gradient" @click="playGame">Play Game</a>
-                            </li>
-                            <li>
-                                <button class="btn btn-md option-gradient" @click="createNewCharacter">Create Character</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div v-if="error">
-                    <p class="align-self-center text-center" style="color: darkred" v-if="error">{{ responseMessage }}</p>
-                </div>
-                
-                <div v-if="responseMessage">
-                    <p class="align-self-center text-center subtitle font-light">{{ responseMessage }}</p> 
-                </div>
-                
-                <div v-if="createCharacter"> 
-                    <div class="row justify-content-center">
-                        <div class="align-self-center text-center">
-                            <h2>Character Name</h2>
-                            <br />
-                            <br />
-                            <input type="text" name="characterName" placeholder="Character Name" v-model="characterName"> 
-                            <br />
-                            <br />
-                            <button class="btn btn-md cta-gradient" @click="saveCharacter">Save Character</button>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="moveCharacter"> <!-- TODO: Add other conditions -->
-                    <div class="row">
-                        <div class="col location-background" style="background-image:url('GameFrontend/assets/images/landingpage/banner-bg.jpg')"> <!--in style to allow vue to change this -->
-                            <div class=""> <!-- for usage later --> 
-                                <div class="row">
-                                    <div class="col-sm-10 col-md-5 offset-sm-1">
-                                        <div v-if="moveCharacter"> 
-                                            <div class="row story-background">
-                                                <div class="story">
-                                                    <b>
-                                                        Story
-                                                    </b>
-
-                                                    <div v-if="locationData">
-                                                        <span><b>Location:</b> {{ locationName }}</span>
-
-                                                        <br />
-                                                        <br />
-
-                                                        <p>{{ locationDescription }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row story-background">
-                                                <div class="players-present">
-                                                    <b>Characters Present</b>
-                                                    <div v-if="locationData">
-                                                        <ul>
-                                                            <li v-for="characterPresent in charactersPresent">
-                                                                {{ characterPresent.name }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-10 col-md-4 offset-sm-1">
-                                        <div class="sidebar-background row">
-                                            <div class="col-6">
-                                                <div class="statistics">
-                                                    <b>Stats</b>
-                                                    <br />
-                                                    HP: 5
-                                                    <br />
-                                                    STR: 7
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div v-if="inventoryData">
-                                                    <div class="inventory">
-                                                        <b>Inventory</b>
-                                                        <div class="inventory-boxes row">  
-
-                                                            <!--          
-                                                            <div v-if="droppedLootData">
-                                                                <span>Loot</span>
-                                                                <br />
-                                                                <ul id="droppedLootItems">
-                                                                    <li v-for="droppedLootItem in droppedLootItems">
-                                                                        <span v-bind:style="{ 'color': droppedLootItem.rarityColour }">{{ droppedLootItem.name }}</span> <button @click="pickUpItem(droppedLootItem.id)">Take</button>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            -->
-
-                                                            <div v-for="inventoryItem in inventoryItems" 
-                                                                 v-bind:style="{ 'background-color': inventoryItem.rarityColour }" 
-                                                                 data-toggle="tooltip" 
-                                                                 data-placement="top" 
-                                                                 v-bind:title="inventoryItem.name"
-                                                                 class="box col">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div v-if="moveCharacter"> 
-                                            <div class="row sidebar-background">
-                                                <div class="col">
-                                                    <div class="statistics">
-                                                        <b>Special Actions</b>
-                                                        <br />
-                                                        -
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="inventory">
-                                                        <b>Movement</b>
-                                                        <br />
-                                                        <div v-if="locationData">
-                                                            <button v-if="moveNorth" @click="moveCharacterNorth">Move North</button>
-                                                            <button v-if="moveEast" @click="moveCharacterEast">Move East</button>
-                                                            <button v-if="moveSouth" @click="moveCharacterSouth">Move South</button>
-                                                            <button v-if="moveWest" @click="moveCharacterWest">Move West</button> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-<!--        <div id="main-wrapper">
-             ============================================================== 
-             Top header  
-             ============================================================== 
+        <div id="main-wrapper">
+            <!-- ============================================================== -->
+            <!-- Top header  -->
+            <!-- ============================================================== -->
             <div class="topbar" id="top">
                 <div class="header6">
                     <div class="container po-relative">
@@ -258,20 +48,20 @@
             </div>
             <div class="page-wrapper">
                 <div id="app">
-                     ============================================================== 
-                     Container fluid  
-                     ============================================================== 
+                    <!-- ============================================================== -->
+                    <!-- Container fluid  -->
+                    <!-- ============================================================== -->
                     <div class="container-fluid">
-                         WRITE VUE BELOW HERE 
+                        <!-- WRITE VUE BELOW HERE -->
                         <div class="static-slider-head" style="background-image:url(GameFrontend/assets/images/landingpage/banner-bg.jpg)"> 
                             <div v-if="introScreen">
-                                 ============================================================== 
-                                 Static Slider 10  
-                                 ============================================================== 
+                                <!-- ============================================================== -->
+                                <!-- Static Slider 10  -->
+                                <!-- ============================================================== -->
                                 <div class="container">
-                                     Row  
+                                    <!-- Row  -->
                                     <div class="row justify-content-center">
-                                         Column 
+                                        <!-- Column -->
                                         <div class="col-lg-8 col-md-6 align-self-center text-center" data-aos="fade-up" data-aos-duration="1200">
                                             <h1 class="title">{{ title }}</h1>
                                             <p class="subtitle font-light">{{ text }}</p> 
@@ -279,15 +69,15 @@
                                             <button class="btn btn-outline-light m-r-20 btn-md m-t-30 font-14" @click="createNewCharacter">Create Character</a>
                                             <button class="btn btn-md m-t-30 btn-danger-gradiant font-14" @click="playGame">Play Game</a>
                                         </div>
-                                         Column 
+                                        <!-- Column -->
                                     </div>
                                 </div>
                             </div>
                             <div v-if="createCharacter"> 
                                 <div class="container">
-                                     Row  
+                                    <!-- Row  -->
                                     <div class="row justify-content-center">
-                                         Column 
+                                        <!-- Column -->
                                         <div class="col-lg-8 col-md-6 align-self-center text-center" data-aos="fade-up" data-aos-duration="1200">
                                             <h1 class="title">Character Name</h1>
                                             <p class="subtitle font-light">{{ responseMessage }}</p> 
@@ -297,15 +87,15 @@
                                             <br />
                                             <button class="btn btn-md m-t-30 btn-danger-gradiant font-14" @click="saveCharacter">Save Character</button>
                                         </div>
-                                         Column 
+                                        <!-- Column -->
                                     </div>
                                 </div>
                             </div>
                             <div v-if="moveCharacter"> 
                                 <div class="container">
-                                     Row  
+                                    <!-- Row  -->
                                     <div class="darkened-background row">
-                                         Column 
+                                        <!-- Column -->
                                         <div class="col-sm-6" data-aos="fade-up" data-aos-duration="1200">
                                             <div v-if="locationData">
                                                 <span><b>Location:</b> {{ locationName }}</span>
@@ -346,7 +136,7 @@
                                                 </ul>
                                             </div>
                                             <div v-if="inventoryData">
-                                                TODO place into twig or some other templating engine for reuse?
+                                                <!--TODO place into twig or some other templating engine for reuse?-->
                                                 <span>Inventory</span>
                                                 <br />
                                                 <ul id="inventoryItems">
@@ -360,11 +150,11 @@
                                 </div>
                             </div>
                         </div>
-                        WRITE VUE ABOVE HERE
+                        <!--WRITE VUE ABOVE HERE-->
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
                            
         <style>
             .darkened-background {
