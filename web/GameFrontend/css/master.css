@@ -1,0 +1,74 @@
+.nav-row {
+	background-color: #0a161e;
+	line-height: 1em;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.nav-link {
+	color: #8d97ad;
+	margin-top: 2px;
+}
+
+.location-background {
+	height: 500px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.story-background {
+	background-color: #000000c7;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 20px;
+	color: white;
+}
+
+.sidebar-background {
+	background-color: #000000c7;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 20px;
+	color: white;
+}
+
+.story, .statistics, .inventory, .players-present {
+	margin: 0 10px 0 10px;
+}
+
+.box {
+	background-color: lightblue;
+	height: 30px;
+	max-width: 30px;
+	margin: 5px;
+}
+
+.inventory-boxes {
+	margin-left:-4px;
+}
+
+.cta-gradient {
+	background: #f2994a; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #f2994a, #f2c94c); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #f2994a, #f2c94c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.option-gradient {
+	background: #6190e8; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #6190e8, #a7bfe8); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #6190e8, #a7bfe8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ 
+}
+
+.btn {
+	border: none;
+	border-radius: 0;
+}
+
+p, b, span, ul, li {
+	font-family: 'Montserrat', sans-serif;
+	color: #8d97ad;
+}
+
+.create-character, .select-character {
+	margin-top: 50px;
+}
