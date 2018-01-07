@@ -363,12 +363,10 @@
                             } else {
                                 this.characters = response.data.characters;
                                 
-                                console.log(this.characters);
                                 this.switchTemplate('selectCharacter');
                             }
                         }.bind(this))
                         .catch(function (error) {
-                            this.error = true;
                             this.error = error;
                             console.log(error); // temp
                         }.bind(this));
@@ -397,7 +395,6 @@
                             } else {
                                 this.responseMessage = response.data.message;
                                 this.characterId = response.data.characterId;
-                                this.createCharacter = false;
                                 
                                 data.append("characterId", this.characterId);
                                 data.append("name", this.characterName);
@@ -408,10 +405,10 @@
                                        alert(response.data.message);
                                     } else {
                                        this.responseMessage = response.data.message;
+                                       this.createCharacter = false;
                                     }
                                 }.bind(this))
                                 .catch(function (error) {
-                                   this.error = true;
                                    this.error = error;
                                    console.log(error); // temp
                                 }.bind(this));
@@ -460,7 +457,6 @@
                                 }
                             }.bind(this))
                             .catch(function (error) {
-                                this.error = true;
                                 this.error = error;
                                 console.log(error); // temp
                             }.bind(this));
@@ -492,7 +488,6 @@
                                 }
                             }.bind(this))
                             .catch(function (error) {
-                                this.error = true;
                                 this.error = error;
                                 console.log(error); // temp
                             }.bind(this));
