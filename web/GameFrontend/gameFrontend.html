@@ -13,85 +13,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
         
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        
-        <style>
-            
-            .nav-row {
-                background-color: #0a161e;
-                line-height: 1em;
-                padding-top: 5px;
-                padding-bottom: 5px;
-            }
-            
-            .nav-link {
-                color: #8d97ad;
-                margin-top: 2px;
-            }
-            
-            .location-background {
-                height: 500px;
-                background-repeat: no-repeat;
-                background-size: cover;
-            }
-            
-            .story-background {
-                background-color: #000000c7;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                margin-top: 20px;
-                color: white;
-            }
-            
-            .sidebar-background {
-                background-color: #000000c7;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                margin-top: 20px;
-                color: white;
-            }
-            
-            .story, .statistics, .inventory, .players-present {
-                margin: 0 10px 0 10px;
-            }
-            
-            .box {
-                background-color: lightblue;
-                height: 30px;
-                max-width: 30px;
-                margin: 5px;
-            }
-            
-            .inventory-boxes {
-                margin-left:-4px;
-            }
-            
-            .cta-gradient {
-                background: #f2994a; /* fallback for old browsers */
-                background: -webkit-linear-gradient(to right, #f2994a, #f2c94c); /* Chrome 10-25, Safari 5.1-6 */
-                background: linear-gradient(to right, #f2994a, #f2c94c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            }
-            
-            .option-gradient {
-                background: #6190e8; /* fallback for old browsers */
-                background: -webkit-linear-gradient(to right, #6190e8, #a7bfe8); /* Chrome 10-25, Safari 5.1-6 */
-                background: linear-gradient(to right, #6190e8, #a7bfe8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ 
-            }
-            
-            .btn {
-                border: none;
-                border-radius: 0;
-            }
-            
-            p, b, span, ul, li {
-                font-family: 'Montserrat', sans-serif;
-                color: #8d97ad;
-            }
-            
-            .create-character, .select-character {
-                margin-top: 50px;
-            }
-        </style>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat|New+Rocker" rel="stylesheet">
+				 
+        <!-- MASTER STYLES -->
+        <link rel="stylesheet" href="/GameFrontend/css/master.css">
+				
     </head>
     <body>
         <div id="app">
@@ -152,12 +78,12 @@
                 
                 <div v-if="moveCharacter"> <!-- TODO: Add other conditions -->
                     <div class="row">
-                        <div class="col location-background" style="background-image:url('GameFrontend/assets/images/landingpage/banner-bg.jpg')"> <!--in style to allow vue to change this -->
+                        <div class="col location-background"> <!--in style to allow vue to change this -->
                             <div class=""> <!-- for usage later --> 
                                 <div class="row">
                                     <div class="col-sm-10 col-md-5 offset-sm-1">
                                         <div v-if="moveCharacter"> 
-                                            <div class="row story-background">
+                                            <div class="row story-background s-panel">
                                                 <div class="story">
                                                     <b>
                                                         Story
@@ -173,7 +99,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row story-background">
+                                            <div class="row story-background s-panel">
                                                 <div class="players-present">
                                                     <b>Characters Present</b>
                                                     <div v-if="locationData">
@@ -188,7 +114,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-10 col-md-4 offset-sm-1">
-                                        <div class="sidebar-background row">
+                                        <div class="sidebar-background row s-panel">
                                             <div class="col-6">
                                                 <div class="statistics">
                                                     <b>Stats</b>
@@ -204,7 +130,7 @@
                                                         <b>Inventory</b>
                                                         <div class="inventory-boxes row">  
 
-                                                            <!--          
+<!--                                                                      
                                                             <div v-if="droppedLootData">
                                                                 <span>Loot</span>
                                                                 <br />
@@ -229,7 +155,7 @@
                                             </div>
                                         </div>
                                         <div v-if="moveCharacter"> 
-                                            <div class="row sidebar-background">
+                                            <div class="row sidebar-background s-panel">
                                                 <div class="col">
                                                     <div class="statistics">
                                                         <b>Special Actions</b>
