@@ -16,6 +16,26 @@ class APIHandler
         $this->entityManager = $entityManager;
     }
 
+    public function APISelectCharacterAction($request) 
+    {
+        $characters = $this->entityManager->getRepository('GameBundle:GameCharacter')->findBy(['account' => $request->get('accountId')]);
+           
+        $furtherData = [];
+        $furtherData['characters'] = [];
+        
+        foreach ($characters as $characterEntity) {
+            $furtherData['characters'][] = [
+                    'characterId' => $characterEntity->getId(),
+                    'characterName' => $characterEntity->getName(),
+                ];
+        }
+        
+        $success = true;
+        $message = 'Obtained list of characters.';
+        
+        return $this->returnStandardizedResponse($success, $message, $furtherData);
+    }
+    
     public function APICreateCharacterAction($request)
     {
         // add conditions of failure for certain scenarios eg too many chars per account etc    
@@ -28,7 +48,7 @@ class APIHandler
             
             $this->entityManager->persist($characterEntity);
             $this->entityManager->flush();
-
+            
             $furtherData = [
                 'characterId' => $characterEntity->getId(),
             ];

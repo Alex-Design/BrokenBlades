@@ -13,7 +13,22 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
         
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        
         <style>
+            
+            .nav-row {
+                background-color: #0a161e;
+                line-height: 1em;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .nav-link {
+                color: #8d97ad;
+                margin-top: 2px;
+            }
+            
             .location-background {
                 height: 500px;
                 background-repeat: no-repeat;
@@ -67,13 +82,22 @@
                 border: none;
                 border-radius: 0;
             }
+            
+            p, b, span, ul, li {
+                font-family: 'Montserrat', sans-serif;
+                color: #8d97ad;
+            }
+            
+            .create-character, .select-character {
+                margin-top: 50px;
+            }
         </style>
     </head>
     <body>
         <div id="app">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col px-0">
+                <div class="nav-row row">
+                    <div class="col">
                         <ul class="nav justify-content-center">
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Broken Blades</a>
@@ -88,21 +112,16 @@
                                 <button class="btn btn-md cta-gradient" @click="playGame">Play Game</a>
                             </li>
                             <li>
+                                <button class="btn btn-md option-gradient" @click="selectCharacter">Select Character</a>
+                            </li>
+                            <li>
                                 <button class="btn btn-md option-gradient" @click="createNewCharacter">Create Character</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 
-                <div v-if="error">
-                    <p class="align-self-center text-center" style="color: darkred" v-if="error">{{ responseMessage }}</p>
-                </div>
-                
-                <div v-if="responseMessage">
-                    <p class="align-self-center text-center subtitle font-light">{{ responseMessage }}</p> 
-                </div>
-                
-                <div v-if="createCharacter"> 
+                <div v-if="createCharacter" class="create-character"> 
                     <div class="row justify-content-center">
                         <div class="align-self-center text-center">
                             <h2>Character Name</h2>
@@ -115,6 +134,22 @@
                         </div>
                     </div>
                 </div>
+                
+                <div v-if="selectChar" class="select-character"> 
+                    <div class="row justify-content-center">
+                        <div class="align-self-center text-center">
+                            <h2>Choose Your Character</h2>
+                            <br />
+                            <div v-for="character in characters">
+                                <h3>{{ character.characterName }}</h3>
+                                <button class="btn btn-md cta-gradient" @click="chooseCharacter(character.characterId, character.characterName)">Select Character</button>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div v-if="moveCharacter"> <!-- TODO: Add other conditions -->
                     <div class="row">
                         <div class="col location-background" style="background-image:url('GameFrontend/assets/images/landingpage/banner-bg.jpg')"> <!--in style to allow vue to change this -->
@@ -158,9 +193,9 @@
                                                 <div class="statistics">
                                                     <b>Stats</b>
                                                     <br />
-                                                    HP: 5
+                                                    <span>HP: 5</span>
                                                     <br />
-                                                    STR: 7
+                                                    <span>STR: 7</span>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -222,149 +257,17 @@
                         </div>
                     </div>
                 </div>
+                <br />
+                <br />
+                <div v-if="error">
+                    <p class="align-self-center text-center" style="color: darkred" v-if="error">{{ responseMessage }}</p>
+                </div>
+                
+                <div v-if="responseMessage">
+                    <p class="align-self-center text-center subtitle font-light">{{ responseMessage }}</p> 
+                </div>
             </div>
         </div>
-        
-<!--        <div id="main-wrapper">
-             ============================================================== 
-             Top header  
-             ============================================================== 
-            <div class="topbar" id="top">
-                <div class="header6">
-                    <div class="container po-relative">
-                        <nav class="navbar navbar-expand-lg h6-nav-bar">
-                            <a href="#" class="navbar-brand" style="color:white">Broken Blades</a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#h6-info" aria-controls="h6-info" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="ti-menu"></span>
-                            </button>
-                            <div class="collapse navbar-collapse hover-dropdown font-14 ml-auto" id="h6-info">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item"> 
-                                        <a class="nav-link" href="#">
-                                            Home
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item"> 
-                                        <a class="nav-link" href="#">
-                                            Game
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <div class="page-wrapper">
-                <div id="app">
-                     ============================================================== 
-                     Container fluid  
-                     ============================================================== 
-                    <div class="container-fluid">
-                         WRITE VUE BELOW HERE 
-                        <div class="static-slider-head" style="background-image:url(GameFrontend/assets/images/landingpage/banner-bg.jpg)"> 
-                            <div v-if="introScreen">
-                                 ============================================================== 
-                                 Static Slider 10  
-                                 ============================================================== 
-                                <div class="container">
-                                     Row  
-                                    <div class="row justify-content-center">
-                                         Column 
-                                        <div class="col-lg-8 col-md-6 align-self-center text-center" data-aos="fade-up" data-aos-duration="1200">
-                                            <h1 class="title">{{ title }}</h1>
-                                            <p class="subtitle font-light">{{ text }}</p> 
-                                            <p style="color: darkred" v-if="error">{{ responseMessage }}</p>
-                                            <button class="btn btn-outline-light m-r-20 btn-md m-t-30 font-14" @click="createNewCharacter">Create Character</a>
-                                            <button class="btn btn-md m-t-30 btn-danger-gradiant font-14" @click="playGame">Play Game</a>
-                                        </div>
-                                         Column 
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-if="createCharacter"> 
-                                <div class="container">
-                                     Row  
-                                    <div class="row justify-content-center">
-                                         Column 
-                                        <div class="col-lg-8 col-md-6 align-self-center text-center" data-aos="fade-up" data-aos-duration="1200">
-                                            <h1 class="title">Character Name</h1>
-                                            <p class="subtitle font-light">{{ responseMessage }}</p> 
-                                            <p style="color: darkred" v-if="error">{{ responseMessage }}</p>
-                                            <input type="text" name="characterName" placeholder="Character Name" v-model="characterName"> 
-                                            <br />
-                                            <br />
-                                            <button class="btn btn-md m-t-30 btn-danger-gradiant font-14" @click="saveCharacter">Save Character</button>
-                                        </div>
-                                         Column 
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-if="moveCharacter"> 
-                                <div class="container">
-                                     Row  
-                                    <div class="darkened-background row">
-                                         Column 
-                                        <div class="col-sm-6" data-aos="fade-up" data-aos-duration="1200">
-                                            <div v-if="locationData">
-                                                <span><b>Location:</b> {{ locationName }}</span>
-                                                
-                                                <br />
-                                                <br />
-
-                                                <p>{{ locationDescription }}</p>
-
-                                                <br />
-
-                                                <span>Characters Present: </span>
-
-                                                <br />
-
-                                                <ul>
-                                                    <li v-for="characterPresent in charactersPresent">
-                                                        {{ characterPresent.name }}
-                                                    </li>
-                                                </ul>
-
-                                                <br />
-
-                                                <button v-if="moveNorth" @click="moveCharacterNorth">Move North</button>
-                                                <button v-if="moveEast" @click="moveCharacterEast">Move East</button>
-                                                <button v-if="moveSouth" @click="moveCharacterSouth">Move South</button>
-                                                <button v-if="moveWest" @click="moveCharacterWest">Move West</button>                
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6" data-aos="fade-up" data-aos-duration="1200">
-                                            <div v-if="droppedLootData">
-                                                <span>Loot</span>
-                                                <br />
-                                                <ul id="droppedLootItems">
-                                                    <li v-for="droppedLootItem in droppedLootItems">
-                                                        <span v-bind:style="{ 'color': droppedLootItem.rarityColour }">{{ droppedLootItem.name }}</span> <button @click="pickUpItem(droppedLootItem.id)">Take</button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div v-if="inventoryData">
-                                                TODO place into twig or some other templating engine for reuse?
-                                                <span>Inventory</span>
-                                                <br />
-                                                <ul id="inventoryItems">
-                                                    <li v-for="inventoryItem in inventoryItems">
-                                                        <span v-bind:style="{ 'color': inventoryItem.rarityColour }">{{ inventoryItem.name }}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        WRITE VUE ABOVE HERE
-                    </div>
-                </div>
-            </div>
-        </div>-->
                            
         <style>
             .darkened-background {
@@ -390,6 +293,9 @@
                    characterId: 1,
                    characterName: '',
                    
+                   selectChar: false,
+                   characters: false,
+                   
                    moveCharacter: false,
                    locationData: null,
                    moveNorth: false,
@@ -405,22 +311,60 @@
                 },
                 methods: {
                     
+                    clearAllTemplates: function() {
+                        this.introScreen = false;
+                        this.error = false;
+                        this.responseMessage = false;
+                        this.createCharacter = false;
+                        this.moveCharacter = false;
+                        this.inventory = false;
+                        this.selectChar = false;
+                    },
+                    
+                    switchTemplate: function(chosenTemplate) {
+                        switch (chosenTemplate) {
+                            case 'createNewCharacter': 
+                                this.clearAllTemplates();
+                                this.createCharacter = true;
+                                this.responseMessage = 'Please name your new character.';
+                                break;
+                            case 'saveCharacter': 
+                                this.clearAllTemplates();
+                                this.introScreen = true;
+                                break;
+                            case 'playGame':
+                                this.clearAllTemplates();
+                                this.moveCharacter = true;
+                                this.inventory = true;
+                                break;
+                            case 'moveCharacter':
+                                this.clearAllTemplates();
+                                break;
+                            case 'selectCharacter':
+                                this.clearAllTemplates();
+                                this.selectChar = true;
+                                break;
+                        }
+                    },
+                    
                     createNewCharacter: function() {
+                        this.switchTemplate('createNewCharacter');
+                    },
+                    
+                    selectCharacter: function() {
                         
-                      this.introScreen = false;
-                      
-                      // AXIOS does not allow normal object in POST
-                      var data = new FormData();
-                      data.append("accountId", this.accountId);
+                        var data = new FormData();
+                        data.append("accountId", this.accountId);
                         
-                      axios.post('/handle/create/character', data) // get and send account ID/ideally reference
+                        axios.post('/handle/select/character', data)
                          .then(function (response) {
                             if (response.data.success == false) {
                                 alert(response.data.message);
                             } else {
-                                this.responseMessage = response.data.message;
-                                this.characterId = response.data.characterId;
-                                this.createCharacter = true;
+                                this.characters = response.data.characters;
+                                
+                                console.log(this.characters);
+                                this.switchTemplate('selectCharacter');
                             }
                         }.bind(this))
                         .catch(function (error) {
@@ -430,39 +374,58 @@
                         }.bind(this));
                     },
                     
+                    chooseCharacter(characterId, characterName) {
+                        this.characterId = characterId;
+                        this.characterName = characterName;
+                        
+                        // now go to play game
+                        this.playGame();
+                    },
+                    
                     saveCharacter: function() {
                         
-                        this.introScreen = true;
-                        this.createCharacter = false;
+                        this.switchTemplate('saveCharacter');
                         
                         // AXIOS does not allow normal object in POST
                         var data = new FormData();
                         data.append("accountId", this.accountId);
-                        data.append("characterId", this.characterId);
-                        data.append("name", this.characterName);
-
-                        axios.post('/handle/update/character', data)
-                             .then(function (response) {
-                                if (response.data.success == false) {
-                                   alert(response.data.message);
-                                } else {
-                                    this.responseMessage = response.data.message;
-                                }
-                            }.bind(this))
-                            .catch(function (error) {
-                                this.error = true;
-                                this.error = error;
-                                console.log(error); // temp
-                            }.bind(this));
+                        
+                        axios.post('/handle/create/character', data) // get and send account ID/ideally reference
+                         .then(function (response) {
+                            if (response.data.success == false) {
+                                alert(response.data.message);
+                            } else {
+                                this.responseMessage = response.data.message;
+                                this.characterId = response.data.characterId;
+                                this.createCharacter = false;
+                                
+                                data.append("characterId", this.characterId);
+                                data.append("name", this.characterName);
+                                
+                                axios.post('/handle/update/character', data)
+                                .then(function (response) {
+                                    if (response.data.success == false) {
+                                       alert(response.data.message);
+                                    } else {
+                                       this.responseMessage = response.data.message;
+                                    }
+                                }.bind(this))
+                                .catch(function (error) {
+                                   this.error = true;
+                                   this.error = error;
+                                   console.log(error); // temp
+                                }.bind(this));
+                            }
+                        }.bind(this))
+                        .catch(function (error) {
+                            this.error = true;
+                            this.error = error;
+                            console.log(error); // temp
+                        }.bind(this));
                     },
                     
                     playGame: function() {
-                        this.responseMessage = '';
-                        this.error = false;
-                        this.introScreen = false;
-                        this.createCharacter = false;
-                        this.moveCharacter = true;
-                        this.inventory = true;
+                        this.switchTemplate('playGame');
                         this.getCharacterLocation();
                         this.getCharacterInventory();
                     },
@@ -561,7 +524,8 @@
                         axios.post('/handle/getCharacter/inventory', data)
                              .then(function (response) {
                                 if (response.data.success == false) {
-                                     
+                                    this.inventoryItems = false;
+                                    this.inventoryData = true;
                                 } else {
                                     this.responseMessage = response.data.message;
 
