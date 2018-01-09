@@ -52,9 +52,15 @@ class GameCharacter
      */
     private $account;
     
+    /**
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled;
+    
     public function __construct()
     {
         $this->isActive = true;
+        $this->enabled = false;
         
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
@@ -122,5 +128,13 @@ class GameCharacter
 
     function setCharacterStatistics($characterStatistics) {
         $this->characterStatistics = $characterStatistics;
+    }
+    
+    function getEnabled() {
+        return $this->enabled;
+    }
+
+    function setEnabled($enabled) {
+        $this->enabled = $enabled;
     }
 }

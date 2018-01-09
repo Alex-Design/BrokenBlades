@@ -18,7 +18,11 @@ class APIHandler
 
     public function APISelectCharacterAction($request) 
     {
-        $characters = $this->entityManager->getRepository('GameBundle:GameCharacter')->findBy(['account' => $request->get('accountId')]);
+        $characters = $this->entityManager->getRepository('GameBundle:GameCharacter')->findBy(
+                    [
+                        'account' => $request->get('accountId'), 
+                        'enabled' => true
+                    ]); 
            
         $furtherData = [];
         $furtherData['characters'] = [];
@@ -52,7 +56,7 @@ class APIHandler
             $furtherData = [
                 'characterId' => $characterEntity->getId(),
             ];
-
+            
             if ($characterEntity) {
                 $success = true;
                 $message = 'Please name your new character.';
@@ -68,6 +72,7 @@ class APIHandler
         return $this->returnStandardizedResponse($success, $message, $furtherData);
     }
     
+    // Used when creating a character
     public function APIUpdateCharacterAction($request)
     {
         try {
@@ -82,13 +87,15 @@ class APIHandler
             $name = $request->get('name');
             $characterEntity->setName($name);
             
+            $characterEntity->setEnabled(true);
+            
             $this->entityManager->persist($characterEntity);
             $this->entityManager->flush();
             
             $furtherData = null;
             $success = true;
             $message = 'Your character has been saved.';
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $furtherData = null;
             $success = false;
             $message = 'Your character could not be saved. Error: ' . $e->getMessage();
