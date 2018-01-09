@@ -39,6 +39,12 @@ class GameCharacter
      * @ORM\JoinColumn(name="inventoryId", referencedColumnName="id")
      */
     private $inventory;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="CharacterStats", inversedBy="character")
+     * @ORM\JoinColumn(name="characterStatsId", referencedColumnName="id")
+     */
+    private $characterStatistics;
 
     /**
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="characters")
@@ -70,9 +76,6 @@ class GameCharacter
     public function setAccount($account) {
         $this->account = $account;
     }
-    
-    
-    
 
     public function setName($name) {
         $this->name = $name;
@@ -111,5 +114,13 @@ class GameCharacter
     
     function getInventory() {
         return $this->inventory;
+    }
+    
+    function getCharacterStatistics() {
+        return $this->characterStatistics;
+    }
+
+    function setCharacterStatistics($characterStatistics) {
+        $this->characterStatistics = $characterStatistics;
     }
 }

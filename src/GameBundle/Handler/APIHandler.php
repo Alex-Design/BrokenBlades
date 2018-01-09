@@ -217,6 +217,40 @@ class APIHandler
         return $this->returnStandardizedResponse($success, $message, $furtherData);
     }
     
+    public function APIGetCharacterStatisticsAction($request)
+    {
+        $characterId = $request->get('characterId');
+        $characterEntity = $this->entityManager->getRepository('GameBundle:GameCharacter')->find($characterId);
+
+        $statsEntity = $characterEntity->getCharacterStatistics();
+        
+        if ($statsEntity) {
+            
+            $types = ['Current', 'Maximum'];
+            $stats = ['Health', 'Strength'];
+            
+            foreach ($stats as $stat) {
+                $characterStatisticsArray[$stat] = [];
+                foreach ($types as $type) {
+                    $getterAction = 'get' . $type . $stat;
+                    $characterStatisticsArray[$stat][$type] = $statsEntity->$getterAction();
+                }
+                $characterStatisticsArray[$stat]['Percentage'] = ($characterStatisticsArray[$stat]['Current'] / $characterStatisticsArray[$stat]['Maximum']) * 100;
+            }
+            
+            $furtherData = ['characterStatistics' => $characterStatisticsArray];
+            
+            $message = 'Obtained character statistics';
+            $success = true;
+        } else {
+            $furtherData = [];
+            $message = 'Could not obtain character statistics';
+            $success = false;
+        }
+        
+        return $this->returnStandardizedResponse($success, $message, $furtherData);
+    }
+    
     // TODO remove hardcoding, use loot table instead
     public function APIGenerateDroppedLootItems()
     {

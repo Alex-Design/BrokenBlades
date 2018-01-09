@@ -116,17 +116,25 @@
                                     <div class="col-sm-10 col-md-4 offset-sm-1">
                                         <div class="sidebar-background row s-panel">
                                             <div class="col-6">
-                                                <div class="statistics">
-                                                    <b>Stats</b>
-                                                    <br />
-                                                    <span>HP: 5</span>
-                                                    <br />
-                                                    <span>STR: 7</span>
+                                                <div v-if="characterStatisticsData">
+                                                    <div class="character-statistics">
+                                                        <b>Stats</b>
+                                                        <br />
+                                                        <ul>
+                                                            <li v-for="statValue, statName in characterStatistics">
+                                                                {{ statName }}: 
+                                                                <br />
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-success" role="progressbar" v-bind:style="{ 'width': statValue.Percentage + '%' }" v-bind:aria-valueNow="statValue.Percentage" aria-valuemin="0" v-bind:aria-valuemax="statValue.Maximum">{{ statValue.Current }} / {{ statValue.Maximum }} ({{ statValue.Percentage }} %)</div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div v-if="inventoryData">
-                                                    <div class="inventory">
+                                                    <div class="character-inventory">
                                                         <b>Inventory</b>
                                                         <div class="inventory-boxes row">  
 
@@ -157,14 +165,14 @@
                                         <div v-if="moveCharacter"> 
                                             <div class="row sidebar-background s-panel">
                                                 <div class="col">
-                                                    <div class="statistics">
+                                                    <div class="character-inventory"> <!-- WIP class -->
                                                         <b>Special Actions</b>
                                                         <br />
                                                         -
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="inventory">
+                                                    <div class="character-inventory"> <!-- WIP class -->
                                                         <b>Movement</b>
                                                         <br />
                                                         <div v-if="locationData">
@@ -230,10 +238,13 @@
                    moveWest: false,
                    
                    droppedLootData: false,
-                   dropedLootItems: false,
+                   droppedLootItems: false,
                    
                    inventoryItems: false,
                    inventoryData: false,
+                   
+                   characterStatistics: false,
+                   characterStatisticsData: false,
                 },
                 methods: {
                     
@@ -351,6 +362,7 @@
                         this.switchTemplate('playGame');
                         this.getCharacterLocation();
                         this.getCharacterInventory();
+                        this.getCharacterStatistics();
                     },
                     
                     getCharacterLocation: function() {
@@ -452,6 +464,32 @@
 
                                     this.inventoryItems = response.data.characterInventoryItems;
                                     this.inventoryData = true;
+                                }
+                            }.bind(this))
+                            .catch(function (error) {
+                                this.error = true;
+                                this.error = error;
+                                console.log(error); // temp
+                            }.bind(this));
+                    },
+                    
+                    getCharacterStatistics: function() {
+                        
+                        // AXIOS does not allow normal object in POST
+                        var data = new FormData();
+                        data.append("accountId", this.accountId);
+                        data.append("characterId", this.characterId);
+
+                        axios.post('/handle/getCharacter/statistics', data)
+                             .then(function (response) {
+                                if (response.data.success == false) {
+                                    this.characterStatistics = false;
+                                    this.characterStatisticsData = true;
+                                } else {
+                                    this.responseMessage = response.data.message;
+
+                                    this.characterStatistics = response.data.characterStatistics;
+                                    this.characterStatisticsData = true;
                                 }
                             }.bind(this))
                             .catch(function (error) {

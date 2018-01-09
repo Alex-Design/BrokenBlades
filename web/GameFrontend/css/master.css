@@ -53,7 +53,7 @@
 	color: white;
 }
 
-.story, .statistics, .inventory, .players-present {
+.story, .character-statistics, .character-inventory, .players-present {
 	margin: 0 10px 0 10px;
 }
 
